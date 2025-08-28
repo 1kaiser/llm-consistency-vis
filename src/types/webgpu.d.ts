@@ -109,7 +109,8 @@ declare enum GPUBufferUsage {
     STORAGE = 0x80,
     COPY_DST = 0x08,
     COPY_SRC = 0x04,
-    MAP_READ = 0x01
+    MAP_READ = 0x01,
+    UNIFORM = 0x40
 }
 
 declare enum GPUMapMode {

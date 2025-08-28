@@ -7,6 +7,7 @@ import { ellipseForce } from "./force_collide_ellipse";
 
 interface Props {
     generations: string[];
+    onWordSelected?: (word: string) => void;
 }
 
 const NUM_WORDS_TO_WRAP = 3;
@@ -165,6 +166,10 @@ class SingleExampleWordGraph extends React.Component<Props> {
                 } else {  // Otherwise, select the clicked node
                     this.selectedNode = d;
                     this.hoveredNode = null;
+                    // Trigger TextAsGraph update with selected word
+                    if (this.props.onWordSelected) {
+                        this.props.onWordSelected(d.word);
+                    }
                 }
                 updateSimulation();
                 update();

@@ -8,16 +8,21 @@
     "@types/node": "^16.18.119",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.179.0",
     "@xenova/transformers": "^2.17.2",
     "d3": "^7.9.0",
     "fast-cosine-similarity": "^1.2.2",
     "mobx": "^6.13.6",
     "mobx-react": "^9.2.0",
+    "neo4j-driver": "^5.28.1",
+    "neovis.js": "^2.1.0",
     "openai": "^4.103.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.3.0",
     "react-scripts": "^5.0.1",
+    "three": "^0.179.1",
+    "three-orbit-controls": "^82.1.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -49,5 +54,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://emilyreif.com/llm-consistency-vis"
+  "homepage": "https://emilyreif.com/llm-consistency-vis",
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
 }
