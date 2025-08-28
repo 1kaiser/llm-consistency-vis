@@ -25,6 +25,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build_and_deploy": "sh gh-deploy.sh",
+    "build:wasm": "cd text-processor-wasm && ./build.sh",
+    "build:optimized": "npm run build:wasm && npm run build",
+    "dev:optimized": "npm run build:wasm && npm start",
+    "benchmark": "node scripts/benchmark.js",
     "proxy": "http://localhost:5432"
   },
   "eslintConfig": {
