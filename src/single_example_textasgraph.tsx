@@ -92,7 +92,17 @@ class TextAsGraphViz {
             .on('mouseout', () => this.hover());
 
         this.inputNode = inputSel.node() as HTMLInputElement;
-        this.inputNode.value = initialText || 'Graphs are all around us';
+        // Use Distill-style examples for better educational value
+        const distillExamples = [
+            'machine learning models',
+            'neural networks',
+            'graph theory concepts',
+            'deep learning systems',
+            'artificial intelligence',
+            'data science tools'
+        ];
+        const randomExample = distillExamples[Math.floor(Math.random() * distillExamples.length)];
+        this.inputNode.value = initialText || randomExample;
 
         const height = 100;
 
@@ -287,6 +297,11 @@ class TextAsGraphViz {
         this.inputNode.value = text;
         this.render();
     }
+
+    public updateExampleText(text: string) {
+        this.inputNode.value = text;
+        this.render();
+    }
 }
 
 const SingleExampleTextAsGraph = React.forwardRef<any, Props>(({ generations, selectedWord }, ref) => {
@@ -299,6 +314,11 @@ const SingleExampleTextAsGraph = React.forwardRef<any, Props>(({ generations, se
             if (vizRef.current) {
                 vizRef.current.updateText(text);
             }
+        },
+        updateExampleText: (text: string) => {
+            if (vizRef.current) {
+                vizRef.current.updateExampleText(text);
+            }
         }
     }));
 
@@ -307,6 +327,35 @@ const SingleExampleTextAsGraph = React.forwardRef<any, Props>(({ generations, se
             // Initialize with first generation or default text
             const initialText = generations.length > 0 ? generations[0] : 'Graphs are all around us';
             vizRef.current = new TextAsGraphViz(containerRef.current, initialText);
+            
+            // Add example buttons with proper event handlers
+            const buttonContainer = document.querySelector('.example-buttons');
+            if (buttonContainer && vizRef.current) {
+                const examples = [
+                    { text: 'neural networks', color: '#2196f3', bg: '#e3f2fd' },
+                    { text: 'graph theory', color: '#4caf50', bg: '#e8f5e8' },
+                    { text: 'machine learning', color: '#ff9800', bg: '#fff3e0' },
+                    { text: 'data science', color: '#e91e63', bg: '#fce4ec' }
+                ];
+                
+                examples.forEach(example => {
+                    const button = document.createElement('button');
+                    button.textContent = example.text.charAt(0).toUpperCase() + example.text.slice(1);
+                    button.style.padding = '4px 8px';
+                    button.style.fontSize = '11px';
+                    button.style.backgroundColor = example.bg;
+                    button.style.border = `1px solid ${example.color}`;
+                    button.style.borderRadius = '4px';
+                    button.style.cursor = 'pointer';
+                    button.style.color = example.color;
+                    button.onclick = () => {
+                        if (vizRef.current) {
+                            vizRef.current.updateExampleText(example.text);
+                        }
+                    };
+                    buttonContainer.appendChild(button);
+                });
+            }
         }
 
         return () => {
@@ -347,12 +396,23 @@ const SingleExampleTextAsGraph = React.forwardRef<any, Props>(({ generations, se
                 marginBottom: '15px',
                 textAlign: 'center'
             }}>
-                Interactive text input with real-time adjacency matrix. Edit the text above to see word relationships. 
-                Hover over matrix cells to highlight word connections.
+                <strong>Interactive text-to-graph adjacency matrix visualization inspired by Distill's GNN research</strong>
                 <br />
-                <strong style={{ color: '#28a745' }}>
-                    💡 Click any word in the main graph above to see it transformed into an adjacency matrix!
+                Edit the text above to see real-time graph transformation. Hover matrix cells to highlight connections.
+                <br />
+                <strong style={{ color: '#1976d2' }}>
+                    📚 Educational: See how text becomes graph structure through adjacency relationships
                 </strong>
+            </div>
+            
+            {/* Example Buttons */}
+            <div className="example-buttons" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '8px',
+                marginBottom: '15px',
+                flexWrap: 'wrap'
+            }}>
             </div>
             <div 
                 ref={containerRef}

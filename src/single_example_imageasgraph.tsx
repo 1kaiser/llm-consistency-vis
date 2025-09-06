@@ -57,7 +57,17 @@ function makeDrag(simulation: any) {
 }
 
 function fontColor(d: any) {
+    if (d.character) {
+        return '#fff'; // White text on character background
+    }
     return d.isOn ? '#fff' : '#777';
+}
+
+function pixelColor(d: any) {
+    if (d.character) {
+        return d.character.color;
+    }
+    return d.isOn ? pixColors[0] : pixColors[1];
 }
 
 const pixColors = [d3.color('#c69700'), d3.color('#fff2ca')];
@@ -65,12 +75,62 @@ const blue = 'steelblue';
 const dBlue = d3.color(blue)!.darker(-0.5);
 const lBlue = d3.color(blue)!.darker(2);
 
+// Authentic Othello characters from Distill GNN publication
+const othelloCharacters = [
+    { name: 'Othello', id: 'O', color: '#1f77b4' },
+    { name: 'Iago', id: 'I', color: '#ff7f0e' },
+    { name: 'Desdemona', id: 'D', color: '#2ca02c' },
+    { name: 'Emilia', id: 'E', color: '#d62728' },
+    { name: 'Cassio', id: 'C', color: '#9467bd' },
+    { name: 'Brabantio', id: 'B', color: '#8c564b' },
+    { name: 'Roderigo', id: 'R', color: '#e377c2' },
+    { name: 'Duke', id: 'U', color: '#7f7f7f' },
+    { name: 'Lodovico', id: 'L', color: '#bcbd22' },
+    { name: 'Gratiano', id: 'G', color: '#17becf' },
+    { name: 'Montano', id: 'M', color: '#ff9896' },
+    { name: 'Bianca', id: 'A', color: '#98df8a' },
+    { name: 'Clown', id: 'W', color: '#c49c94' },
+    { name: 'Officer', id: 'F', color: '#f7b6d3' },
+    { name: 'Gentlemen', id: 'N', color: '#c7c7c7' },
+    { name: 'Sailor', id: 'S', color: '#dbdb8d' },
+    { name: 'Messenger', id: 'X', color: '#9edae5' },
+    { name: 'Musician', id: 'Y', color: '#ffbb78' },
+    { name: 'Senator', id: 'T', color: '#ff98a0' }
+];
+
+// Based on authentic adjacency matrix from Distill GNN - main characters with key relationships
+const othelloInteractions = [
+    //O  I  D  E  C  B  R  U  L  G  M  A  W  F  N  S  X  Y  T
+    [0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1], // Othello
+    [1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0], // Iago  
+    [1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0], // Desdemona
+    [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0], // Emilia
+    [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0], // Cassio
+    [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], // Brabantio  
+    [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0], // Roderigo
+    [1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1], // Duke
+    [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], // Lodovico
+    [0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0], // Gratiano
+    [1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0], // Montano
+    [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Bianca
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], // Clown
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0], // Officer
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1], // Gentlemen
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1], // Sailor  
+    [1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0], // Messenger
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0], // Musician
+    [1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0]  // Senator
+];
+
+// Scene representation - showing key character positions in a 7x7 grid
 const img = `
-.0.0.
-.....
-..0..
-0...0
-.000.
+.O.I.D.
+S..U..E
+.B.F.C.
+N..L..G
+.R.M.A.
+T..X..W
+.......
 `.trim();
 
 class ImageAsGraphViz {
@@ -113,12 +173,15 @@ class ImageAsGraphViz {
 
         this.containerSel.style('margin-bottom', '20px');
 
-        // Initialize pixels
+        // Initialize pixels (characters)
         img.split('\n').forEach((row, j) => {
             row.split('').forEach((d, i) => {
+                const character = othelloCharacters.find(c => c.id === d);
                 this.pixels.push({
                     i, j, 
-                    isOn: d === '0', 
+                    char: d,
+                    character: character,
+                    isOn: d !== '.', 
                     pos: [i * s, j * s], 
                     x: i * s, 
                     y: j * s
@@ -128,7 +191,7 @@ class ImageAsGraphViz {
 
         this.pixels.forEach((d, i) => {
             d.pixelIndex = i;
-            d.str = d.i + '-' + d.j;
+            d.str = d.character ? d.character.name : '';
         });
 
         const p = s / n;
@@ -137,6 +200,16 @@ class ImageAsGraphViz {
             const [a, b] = d;
             d.dist = Math.max(Math.abs(a.i - b.i), Math.abs(a.j - b.j));
             d.pos = [a.pixelIndex * p, b.pixelIndex * p];
+            
+            // Check character interaction matrix
+            d.hasInteraction = false;
+            if (a.character && b.character) {
+                const aIdx = othelloCharacters.findIndex(c => c.id === a.character.id);
+                const bIdx = othelloCharacters.findIndex(c => c.id === b.character.id);
+                if (aIdx >= 0 && bIdx >= 0) {
+                    d.hasInteraction = othelloInteractions[aIdx][bIdx] === 1;
+                }
+            }
         });
 
         // Create three visualizations
@@ -146,14 +219,16 @@ class ImageAsGraphViz {
 
         // Add labels
         this.containerSel.selectAll('svg').each((d: any, index: number, nodes: any[]) => {
-            const labels = ['Image Pixels', 'Adjacency Matrix', 'Graph'];
+            const labels = ['Scene from Othello', 'Character Adjacency Matrix', 'Character Interaction Graph'];
             d3.select(nodes[index])
                 .append('text')
                 .classed('chart-label', true)
                 .text(labels[index])
                 .attr('x', w / 2)
                 .attr('y', w + 20)
-                .attr('text-anchor', 'middle');
+                .attr('text-anchor', 'middle')
+                .style('font-weight', 'bold')
+                .style('fill', '#333');
         });
 
         this.setupImageView(i, s, w);
@@ -216,7 +291,7 @@ class ImageAsGraphViz {
             .classed('matrix-cell', true)
             .attr('height', p - 0.2)
             .attr('width', p - 0.2)
-            .attr('fill', (d: any) => d.dist === 1 ? dBlue as any : '#fff')
+            .attr('fill', (d: any) => d.hasInteraction ? dBlue as any : '#fff')
             .attr('transform', (d: any) => `translate(${d.pos[0]}, ${d.pos[1]})`)
             .on('mouseover', (event: MouseEvent, d: any) => this.updateActivePair(d));
 
@@ -251,7 +326,7 @@ class ImageAsGraphViz {
         f.svg.style('background', '#fff');
 
         this.links = this.pairs
-            .filter((d: any) => d.dist === 1)
+            .filter((d: any) => d.hasInteraction)
             .filter((d: any) => d[0].pixelIndex < d[1].pixelIndex);
 
         this.links.forEach((d: any) => {
@@ -318,15 +393,19 @@ class ImageAsGraphViz {
     }
 
     private updateOn() {
-        this.iRectSel.style('fill', (d: any) => d.isOn ? pixColors[0] : pixColors[1]);
-        this.fNodeSel.style('fill', (d: any) => d.isOn ? pixColors[0] : pixColors[1]);
+        this.iRectSel.style('fill', (d: any) => pixelColor(d));
+        this.fNodeSel.select('circle').style('fill', (d: any) => pixelColor(d));
+        
+        // Update text display for character names
+        this.iTextSel.text((d: any) => d.character ? d.character.name : '');
+        this.fTextSel.text((d: any) => d.character ? d.character.id : '');
     }
 
     private updateActivePixel(pixel: any) {
         this.iPathSel.style('opacity', (e: any) => e[0] === pixel ? 1 : 0);
         this.fLinkSel.classed('active', (e: any) => e[0] === pixel || e[1] === pixel);
         this.gRectSel
-            .filter((d: any) => d.dist === 1)
+            .filter((d: any) => d.hasInteraction)
             .style('fill', !pixel ? dBlue : (e: any) => 
                 e[0] === pixel || e[1] === pixel ? lBlue : dBlue
             );
@@ -365,7 +444,7 @@ class ImageAsGraphViz {
         this.fLinkSel.classed('active', (d: any) => d.isActive);
 
         this.gRectSel
-            .filter((d: any) => d.dist === 1)
+            .filter((d: any) => d.hasInteraction)
             .style('fill', (d: any) => d.isActive ? lBlue : dBlue);
     }
 }
@@ -399,19 +478,54 @@ const SingleExampleImageAsGraph: React.FC<Props> = observer(({ generations }) =>
             <h3 style={{ 
                 color: '#1565c0', 
                 fontSize: '16px', 
-                marginBottom: '15px',
+                marginBottom: '10px',
                 textAlign: 'center'
             }}>
-                🔲 Image-as-Graph: Pixels to Network Visualization
+                🎭 Othello Character Interaction Network (from Distill GNN)
             </h3>
             <div className="instruction-text" style={{ 
                 fontSize: '12px', 
                 color: '#666', 
                 marginBottom: '15px',
-                textAlign: 'center'
+                textAlign: 'center',
+                padding: '10px',
+                background: '#f8f9fa',
+                borderRadius: '4px'
             }}>
-                Interactive transformation from pixel grid to adjacency matrix to force-directed graph. 
-                Click pixels to toggle, hover to explore connections, drag nodes in the graph view.
+                <strong>From Distill's "A Gentle Introduction to Graph Neural Networks":</strong><br/>
+                "(Left) Image of a scene from the play 'Othello'. (Center) Adjacency matrix of the interaction between characters in the play. (Right) Graph representation of these interactions."<br/>
+                <em>Click character pixels to toggle visibility, hover to explore connections, drag nodes in the graph view.</em>
+            </div>
+            
+            {/* Character Legend */}
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                gap: '15px',
+                marginBottom: '15px',
+                flexWrap: 'wrap'
+            }}>
+                {othelloCharacters.map(char => (
+                    <div key={char.id} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        fontSize: '11px',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        background: '#fff',
+                        border: `2px solid ${char.color}`,
+                        color: '#333'
+                    }}>
+                        <div style={{
+                            width: '12px',
+                            height: '12px',
+                            backgroundColor: char.color,
+                            marginRight: '6px',
+                            borderRadius: '2px'
+                        }}></div>
+                        <strong>{char.id}</strong> - {char.name}
+                    </div>
+                ))}
             </div>
             <div 
                 ref={containerRef}

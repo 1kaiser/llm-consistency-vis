@@ -1,6 +1,8 @@
 # LLM consistency visualzation
 
-When an LLM returns a response, we’re actually sampling from a probability distribution over many possible outputs. But we usually only see one of those samples—the response that gets returned.
+## 🌐 [Live Demo](https://1kaiser.github.io/llm-consistency-vis/)
+
+When an LLM returns a response, we're actually sampling from a probability distribution over many possible outputs. But we usually only see one of those samples—the response that gets returned.
 
 If we’re just using the model to get an answer or write some text, that’s fine. But if we want to understand how the model behaves—or build systems that depend on it—we need more than just one response. **We need to understand the whole distribution of possible outputs.**
 
