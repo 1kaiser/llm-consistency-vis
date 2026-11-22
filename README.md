@@ -86,12 +86,10 @@ const response = await openaiClient.chat.completions.create({
 
 ### 🎨 Visualization Types
 
-1. **Graph Network**: Interactive D3.js word co-occurrence patterns with **word selection → adjacency matrix integration**
+1. **Graph Network**: Interactive D3.js word co-occurrence graph across sampled responses
 2. **Word Tree**: Hierarchical visualization of phrase beginnings and continuations  
 3. **Highlights**: Text-based view with pattern highlighting and frequency analysis
 4. **Raw Outputs**: Plain text display of all generated responses
-5. **Demo Optimized**: Performance demonstration with WASM simulation
-6. **Image as Graph**: Educational GNN visualization from Distill publication (dedicated tab)
 
 ### 🔑 Key Insight
 

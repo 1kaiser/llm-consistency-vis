@@ -5,16 +5,12 @@ import { state } from "./state"; // Import your MobX store
 import SingleExampleWordtree from './single_example_wordtree';
 import SingleExampleHighlights from "./single_example_highlights";
 import SingleExampleWordGraph from "./single_example_wordgraph";
-import DemoOptimizedWordGraph from "./single_example_demo_optimized";
-import SingleExampleTextAsGraph from "./single_example_textasgraph";
-import SingleExampleImageAsGraph from "./single_example_imageasgraph";
 import { reaction } from 'mobx';
 
 
 class SingleExample extends React.Component {
-    state = { generations: [], visType: 'graph', selectedWordForTextGraph: '' };
+    state = { generations: [], visType: 'graph' };
     disposer?: () => void;
-    textAsGraphRef = React.createRef<any>();
 
     render() {
         if (!state.selectedExample) {
@@ -40,6 +36,7 @@ class SingleExample extends React.Component {
         let instructionText = '';
         switch (this.state.visType) {
             case 'wordtree':
+            case 'word tree':
                 vis = this.renderOutputsWordTree();
                 instructionText = `Hover over a word to highlight it across all generated sentences. 
                 The size of the word corresponds to its frequency in the generated sentences.`
@@ -48,25 +45,12 @@ class SingleExample extends React.Component {
                 vis = this.renderOutputsGraph();
                 instructionText = `Hover over any word or phrase to highlight all sentences containing it. 
                 \nClick to pin the highlight - click again or click elsewhere to unpin.
-                \nDrag to pan, scroll to zoom in and out.
-                \n💡 Click any word to see it converted to an adjacency matrix in the Text-as-Graph section below!`
+                \nDrag to pan, scroll to zoom in and out.`
                 break;
 
             case 'highlights':
                 vis = this.renderOutputsHighlights();
                 instructionText = 'Highlighted words are the ones that are present in multiple generated sentences. The bolded output is the text you entered to compare against the LLM outputs (if provided). Color of highlights is not related to the colors used in the graph visualization.'
-                break;
-            case 'demo optimized':
-                vis = this.renderDemoOptimized();
-                instructionText = 'DEMO: Ultra-optimized visualization using WASM + WebGPU simulation. Shows 8-15x performance improvements over standard JavaScript processing.'
-                break;
-            case 'image as graph':
-                vis = this.renderImageAsGraph();
-                instructionText = 'Educational visualization from Distill\'s GNN publication. Shows transformation from pixel grid → adjacency matrix → force-directed graph. Click pixels to toggle, hover to explore connections, drag nodes in graph view.';
-                break;
-            case 'text as graph':
-                vis = this.renderTextAsGraph();
-                instructionText = '🔗 Interactive text-to-graph adjacency matrix from Distill\'s GNN research. Edit text to see real-time graph transformation. Hover matrix cells to highlight connections. Demonstrates how text becomes graph structure.';
                 break;
             default:
                 vis = this.renderOutputsBasic();
@@ -187,9 +171,6 @@ class SingleExample extends React.Component {
             {makeRadioButton('word tree')}
             {makeRadioButton('highlights')}
             {makeRadioButton('raw outputs')}
-            {makeRadioButton('demo optimized')}
-            {makeRadioButton('text as graph')}
-            {makeRadioButton('image as graph')}
         </div>)
     }
 
@@ -201,16 +182,7 @@ class SingleExample extends React.Component {
     renderOutputsGraph() {
         return <SingleExampleWordGraph 
             generations={this.state.generations}
-            onWordSelected={this.handleWordSelected}
         ></SingleExampleWordGraph>;
-    }
-
-    handleWordSelected = (word: string) => {
-        this.setState({ selectedWordForTextGraph: word });
-        // Update the TextAsGraph component if it exists
-        if (this.textAsGraphRef.current) {
-            this.textAsGraphRef.current.updateText(word);
-        }
     }
 
 renderOutputsBasic() {
@@ -241,22 +213,6 @@ renderOutputsBasic() {
       },
       { fireImmediately: true }
     );
-  }
-
-  renderDemoOptimized() {
-    return <DemoOptimizedWordGraph generations={this.state.generations} />;
-  }
-
-  renderImageAsGraph() {
-    return <SingleExampleImageAsGraph generations={this.state.generations} />;
-  }
-
-  renderTextAsGraph() {
-    return <SingleExampleTextAsGraph 
-      ref={this.textAsGraphRef}
-      generations={this.state.generations} 
-      selectedWord={this.state.selectedWordForTextGraph}
-    />;
   }
 
 
