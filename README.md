@@ -332,4 +332,10 @@ npx playwright test tests/integration-verification.spec.ts --workers=1
 Full license text: http://www.apache.org/licenses/LICENSE-2.0
 
 ### Repository Status
-This is a fork of [Emily Reif's original work](https://github.com/EmilyReif/llm-consistency-vis) with performance enhancements and modern web technology integration. The original visualization features remain fully intact with additional optimization capabilities and **zero external dependencies**.
+This is a fork of [Emily Reif's original work](https://github.com/EmilyReif/llm-consistency-vis) (Apache-2.0 License, Google PAIR / University of Washington) adapted for [1kaiser.github.io/llm-consistency-vis](https://1kaiser.github.io/llm-consistency-vis/) with performance enhancements and client-side visualization integrations.
+
+### Academic & Library References
+1. **Upstream Project:** Reif, E., Nazarova, D., Hwang, J., & Yang, C. — [`EmilyReif/llm-consistency-vis`](https://github.com/EmilyReif/llm-consistency-vis) (Apache-2.0 License).
+2. **GNN & Graph Attribution:** Sanchez-Lengeling, B., Reif, E., Pearce, A., & Wiltschko, A. B. (2021). *A Gentle Introduction to Graph Neural Networks*. Distill. [doi:10.23915/distill.00033](https://doi.org/10.23915/distill.00033).
+3. **Visualization Stack:** [React 18](https://react.dev/), [D3.js v7](https://d3js.org/), [Three.js](https://threejs.org/), and MobX.
+4. **Home Portfolio:** [1kaiser.github.io](https://1kaiser.github.io/).

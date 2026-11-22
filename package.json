@@ -54,7 +54,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://emilyreif.com/llm-consistency-vis",
+  "homepage": "https://1kaiser.github.io/llm-consistency-vis",
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "gh-pages": "^6.3.0"

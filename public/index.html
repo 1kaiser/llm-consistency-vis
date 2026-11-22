@@ -72,6 +72,13 @@
 <body>
 
   <header>
+    <nav style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; font-family: system-ui, -apple-system, sans-serif; font-size: 13px;">
+      <a href="https://1kaiser.github.io/" style="color: #2563eb; text-decoration: none; font-weight: 600;">&larr; 1kaiser.github.io</a>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+        <a href="https://github.com/1kaiser/llm-consistency-vis" target="_blank" rel="noopener" style="color: #4b5563; text-decoration: none;">1kaiser/llm-consistency-vis</a>
+        <a href="https://github.com/EmilyReif/llm-consistency-vis" target="_blank" rel="noopener" style="color: #4b5563; text-decoration: none;">Upstream (EmilyReif)</a>
+      </div>
+    </nav>
     <h1>Visualizing LLM outputs</h1>
     <p class="authors"> Emily Reif, Deniz Nazarova, Jared Hwang, Claire Yang </p>
     <p>
@@ -92,6 +99,13 @@
 
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+
+  <footer style="margin-top: 32px; padding: 16px 0 24px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #4b5563; text-align: left; line-height: 1.6;">
+    <strong>References &amp; Upstream Attribution:</strong>
+    Forked and extended from <a href="https://github.com/EmilyReif/llm-consistency-vis" target="_blank" rel="noopener">EmilyReif/llm-consistency-vis</a> (Emily Reif, Deniz Nazarova, Jared Hwang, Claire Yang; Apache-2.0 License).
+    Incorporates Google LLC Apache-2.0 educational visualizations from <em>A Gentle Introduction to Graph Neural Networks</em> (Sanchez-Lengeling et al., 2021, <a href="https://doi.org/10.23915/distill.00033" target="_blank" rel="noopener">Distill, doi:10.23915/distill.00033</a>).
+    Built with <a href="https://react.dev/" target="_blank" rel="noopener">React 18</a>, <a href="https://d3js.org/" target="_blank" rel="noopener">D3.js v7</a>, <a href="https://threejs.org/" target="_blank" rel="noopener">Three.js</a> &amp; MobX. Back to <a href="https://1kaiser.github.io/">1kaiser.github.io</a>.
+  </footer>
 </body>
 
 </html>
